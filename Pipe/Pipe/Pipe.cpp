@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <fstream>
 
 
 using namespace std;
@@ -53,9 +54,44 @@ void Print_Pipe(Pipe New_Pipe)
 }
 
 
+
+void Edit_Pipe(Pipe& New_Pipe)
+{
+	New_Pipe.length -= 10;
+}
+
+
+
+void Save_Pipe(Pipe& New_Pipe)
+{
+	ofstream fout;
+	fout.open("Save.txt", ios::out);
+	fout << New_Pipe.id << endl << New_Pipe.length << endl << New_Pipe.diametr << endl << New_Pipe.status << endl;
+	fout.close();
+}
+
+
+
+Pipe Load_Pipe()
+{
+	ifstream fin;
+	fin.open("Save.txt", ios::in);
+	Pipe New_Pipe;
+	fin >> New_Pipe.id;
+	fin >> New_Pipe.length;
+	fin >> New_Pipe.diametr;
+	fin >> New_Pipe.status;
+	fin.close();
+	return New_Pipe;
+}
+
 int main()
 {
 	Pipe Preset_Pipe = Create_New_Pipe();
 	Print_Pipe(Preset_Pipe);
+	Edit_Pipe(Preset_Pipe);
+	Print_Pipe(Preset_Pipe);
+	Save_Pipe(Preset_Pipe);
+	Print_Pipe(Load_Pipe());
 	return 0;
 }
