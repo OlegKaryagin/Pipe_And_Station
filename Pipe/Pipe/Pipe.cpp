@@ -41,6 +41,98 @@ bool above_0(int num)
 
 
 
+Station Create_New_Station()
+{
+	Station New_station;
+	do
+	{
+		cin.clear();
+		cin.ignore(10000,'\n');
+		cout << "Please, enter the station id (id above 0)" << endl;
+		cin >> New_station.id;
+	} while (cin.fail() || !above_0(New_station.id));
+	do
+	{
+		cin.clear();
+		cin.ignore(1164, '\n');
+		cout << "Please, enter the station name" << endl;
+		cin >> New_station.name;
+	} while (cin.fail());
+	do
+	{
+		cin.clear();
+		cin.ignore(1164, '\n');
+		cout << "Please, enter the number of workshop (Number above 0)" << endl;
+		cin >>New_station.number_of_workshops;
+	} while (cin.fail() || !above_0(New_station.number_of_workshops));
+	do
+	{
+		cin.clear();
+		cin.ignore(1164, '\n');
+		cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
+		cin >> New_station.workshops_in_operation;
+	} while (cin.fail() || !above_0(New_station.workshops_in_operation));
+	do
+	{
+		cin.clear();
+		cin.ignore(10000,'\n');
+		cout << "Please, enter the efficiency of station (0-100)" << endl;
+		cin >> New_station.efficiency;
+	} while (cin.fail() || New_station.efficiency <= 0);
+	return New_station;
+}
+
+
+
+void Edit_Station(Station& New_station)
+{
+	New_station.number_of_workshops -= 1;
+	New_station.number_of_workshops = above_0(New_station.number_of_workshops) ? New_station.number_of_workshops : 1;
+}
+
+
+
+void Save_Station(Station& New_Station)
+{
+	ofstream fout;
+	fout.open("Save_Station.txt", ios::out);
+	if (fout.is_open())
+	{
+		fout << New_Station.id << endl << New_Station.name << endl << New_Station.number_of_workshops << endl
+			<< New_Station.workshops_in_operation << endl << New_Station.efficiency << endl;
+		fout.close();
+	}
+	else {
+		cout << "Error opening file" << endl;
+	}
+}
+
+
+
+Station Load_Station()
+{
+	ifstream fin;
+	Station New_Station;
+	fin.open("Save_Station.txt", ios::in);
+	if (fin.is_open())
+	{
+		fin >> New_Station.id;
+		fin >> New_Station.name;
+		fin >> New_Station.number_of_workshops;
+		fin >> New_Station.workshops_in_operation;
+		fin >> New_Station.efficiency;
+		fin.close();
+	}
+	else {
+		cout << "Error the opening file" << endl;
+	}
+	return New_Station;
+
+}
+
+
+
+
  Pipe Create_New_Pipe()
 {
 	Pipe New_Pipe;
@@ -76,12 +168,17 @@ bool above_0(int num)
 
 
 
-void Print_Pipe(Pipe New_Pipe)
+void Print(Pipe New_Pipe, Station New_Station)
 {
 	cout << "Pipe ID:\t" << New_Pipe.id
 		<< "\tPipe length:\t" << New_Pipe.length
 		<< "\tPipe diametr:\t" << New_Pipe.diametr
 		<< "\tPipe status:\t" << New_Pipe.status << endl;
+	cout << "Station ID:\t" << New_Station.id
+		<< "\tStation name:\t" << New_Station.name
+		<< "\tNumber of workshop:\t" << New_Station.number_of_workshops
+		<< "\tWorkshops in operation:\t" << New_Station.workshops_in_operation
+		<< "\tStation efficiency:\t" << New_Station.efficiency << endl;
 
 }
 
@@ -147,12 +244,18 @@ void PrintMenu()
 
 int main()
 {
+	Station Preset_Station;
 	Pipe Preset_Pipe;
 	while (1)
 	{
 		PrintMenu();
 		int i = 0;
-		cin >> i;
+		do
+		{
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cin >> i;
+		} while (cin.fail());
 		switch (i)
 		{
 		case 1:
@@ -162,11 +265,12 @@ int main()
 			}
 		case 2:
 			{
-
+				Preset_Station = Create_New_Station();
+				break;
 			}
 		case 3:
 			{
-				Print_Pipe(Preset_Pipe);
+				Print(Preset_Pipe,Preset_Station);
 				break;
 			}
 		case 4:
@@ -176,16 +280,19 @@ int main()
 		}
 		case 5:
 		{
-
+			Edit_Station(Preset_Station);
+			break;
 		}
 		case 6:
 		{
 			Save_Pipe(Preset_Pipe);
+			Save_Station(Preset_Station);
 			break;
 		}
 		case 7:
 		{
 			Preset_Pipe=Load_Pipe();
+			Preset_Station = Load_Station();
 			break;
 		}
 		case 0:
@@ -198,10 +305,9 @@ int main()
 			}
 		}
 	}
-	Print_Pipe(Preset_Pipe);
+	Print(Preset_Pipe,Preset_Station);
 	
-	Print_Pipe(Preset_Pipe);
+	Print(Preset_Pipe,Preset_Station);
 
-	Print_Pipe(Load_Pipe());
 	return 0;
 }
