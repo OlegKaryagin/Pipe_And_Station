@@ -148,7 +148,7 @@ Station Load_Station()
 		cin.clear();
 		cin.ignore(1164, '\n');
 		cout << "Please, enter the pipe length (mm, length above 0)" << endl;
-		cin >> New_Pipe.length;
+cin >> New_Pipe.length;
 	} while (cin.fail() || !above_0(New_Pipe.length));
 	do
 	{
@@ -239,8 +239,24 @@ void PrintMenu()
 		<< "5. Edit the station" << endl
 		<< "6. Save to file" << endl
 		<< "7. Load from file" << endl
-		<< "0. Exit" << endl;
+		<< "0. Exit" << endl
+		<< "Choose action:" << endl;
 }
+
+
+
+int GetcorrectNumber(int min, int max)
+{
+	int x;
+	while (((cin >> x)).fail() || x<min || x>max)
+	{
+	cin.clear();
+	cin.ignore(10000, '\n');
+	cout << "Input error!" << endl;
+	}
+	return x;
+}
+
 
 int main()
 {
@@ -249,14 +265,7 @@ int main()
 	while (1)
 	{
 		PrintMenu();
-		int i = 0;
-		do
-		{
-			cin.clear();
-			cin.ignore(10000, '\n');
-			cin >> i;
-		} while (cin.fail());
-		switch (i)
+		switch (GetcorrectNumber(0,7))
 		{
 		case 1:
 			{
@@ -305,9 +314,6 @@ int main()
 			}
 		}
 	}
-	Print(Preset_Pipe,Preset_Station);
-	
-	Print(Preset_Pipe,Preset_Station);
 
 	return 0;
 }
