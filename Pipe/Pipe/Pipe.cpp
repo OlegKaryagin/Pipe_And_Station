@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string>
 
 
 using namespace std;
@@ -56,7 +57,7 @@ Station Create_New_Station()
 		cin.clear();
 		cin.ignore(1164, '\n');
 		cout << "Please, enter the station name" << endl;
-		cin >> New_station.name;
+		getline (cin, New_station.name);
 	} while (cin.fail());
 	do
 	{
@@ -71,23 +72,28 @@ Station Create_New_Station()
 		cin.ignore(1164, '\n');
 		cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
 		cin >> New_station.workshops_in_operation;
-	} while (cin.fail() || !above_0(New_station.workshops_in_operation));
+	} while (cin.fail() || !above_0(New_station.workshops_in_operation) || New_station.workshops_in_operation > New_station.number_of_workshops);
 	do
 	{
 		cin.clear();
 		cin.ignore(10000,'\n');
 		cout << "Please, enter the efficiency of station (0-100)" << endl;
 		cin >> New_station.efficiency;
-	} while (cin.fail() || New_station.efficiency <= 0);
+	} while (cin.fail() || !above_0(New_station.efficiency) || New_station.efficiency > 100);
 	return New_station;
 }
 
 
 
 void Edit_Station(Station& New_station)
-{
-	New_station.number_of_workshops -= 1;
-	New_station.number_of_workshops = above_0(New_station.number_of_workshops) ? New_station.number_of_workshops : 1;
+{	
+	do
+	{
+		cin.clear();
+		cin.ignore(1164, '\n');
+		cout << "Please, enter the number of workshop (Number above 0)" << endl;
+		cin >> New_station.number_of_workshops;
+	} while (cin.fail() || !above_0(New_station.number_of_workshops));
 }
 
 
@@ -168,26 +174,36 @@ cin >> New_Pipe.length;
 
 
 
-void Print(Pipe New_Pipe, Station New_Station)
+void Print_Pipe(Pipe New_Pipe)//разобраться 
 {
 	cout << "Pipe ID:\t" << New_Pipe.id
 		<< "\tPipe length:\t" << New_Pipe.length
 		<< "\tPipe diametr:\t" << New_Pipe.diametr
 		<< "\tPipe status:\t" << New_Pipe.status << endl;
+}
+
+
+
+void Print_Station(Station New_Station)
+{
 	cout << "Station ID:\t" << New_Station.id
 		<< "\tStation name:\t" << New_Station.name
 		<< "\tNumber of workshop:\t" << New_Station.number_of_workshops
 		<< "\tWorkshops in operation:\t" << New_Station.workshops_in_operation
 		<< "\tStation efficiency:\t" << New_Station.efficiency << endl;
-
 }
 
 
 
 void Edit_Pipe(Pipe& New_Pipe)
 {
-	New_Pipe.length -= 10;
-	New_Pipe.length = above_0(New_Pipe.length) ? New_Pipe.length : 1;
+	do
+	{
+		cin.clear();
+		cin.ignore(1164, '\n');
+		cout << "Please, enter the pipe length (mm, length above 0)" << endl;
+		cin >> New_Pipe.length;
+	} while (cin.fail() || !above_0(New_Pipe.length));
 }
 
 
@@ -234,11 +250,12 @@ void PrintMenu()
 {
 	cout << "1. Create new pipe" << endl
 		<< "2. Create new station" << endl
-		<< "3. Print the object" << endl
-		<< "4. Edit the pipe" << endl
-		<< "5. Edit the station" << endl
-		<< "6. Save to file" << endl
-		<< "7. Load from file" << endl
+		<< "3. Print the pipe" << endl
+		<< "4. Print the station" << endl
+		<< "5. Edit the pipe" << endl
+		<< "6. Edit the station" << endl
+		<< "7. Save to file" << endl
+		<< "8. Load from file" << endl
 		<< "0. Exit" << endl
 		<< "Choose action:" << endl;
 }
@@ -265,7 +282,7 @@ int main()
 	while (1)
 	{
 		PrintMenu();
-		switch (GetcorrectNumber(0,7))
+		switch (GetcorrectNumber(0,8))
 		{
 		case 1:
 			{
@@ -279,26 +296,31 @@ int main()
 			}
 		case 3:
 			{
-				Print(Preset_Pipe,Preset_Station);
+				Print_Pipe(Preset_Pipe);
 				break;
 			}
 		case 4:
+			{
+				Print_Station(Preset_Station);
+				break;
+			}
+		case 5:
 		{
 			Edit_Pipe(Preset_Pipe);
 			break;
 		}
-		case 5:
+		case 6:
 		{
 			Edit_Station(Preset_Station);
 			break;
 		}
-		case 6:
+		case 7:
 		{
 			Save_Pipe(Preset_Pipe);
 			Save_Station(Preset_Station);
 			break;
 		}
-		case 7:
+		case 8:
 		{
 			Preset_Pipe=Load_Pipe();
 			Preset_Station = Load_Station();
