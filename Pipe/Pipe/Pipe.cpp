@@ -1,245 +1,172 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include "CPipe.h"
+#include "correctnumber.h"
+#include "SStation.h"
 
 
 using namespace std;
 
 
-
-struct Pipe
+void Edit_Station_Menu()
 {
-	int id;
-	int length;
-	int diametr;
-	string status;
-};
-
-
-
-struct Station
-{
-	int id;
-	string name;
-	int number_of_workshops;
-	int workshops_in_operation;
-	int efficiency;
-};
-
-
-
-bool correct(string test)
-{
-	return test == "work" || test == "repair";
+	cout << "1. Edit the station name" << endl
+		<< "2. Edit number of workshop" << endl
+		<< "3. Edit number workshop in operation" << endl
+		<< "4. Edit efficiency" << endl
+		<< "0. Exit" << endl
+		<< "Choose action:" << endl;
 }
 
 
 
-bool above_0(int num)
-{
-	return num > 0;
-}
 
-
-
-Station Create_New_Station()
-{
-	Station New_station;
-	do
-	{
-		cin.clear();
-		cin.ignore(10000,'\n');
-		cout << "Please, enter the station id (id above 0)" << endl;
-		cin >> New_station.id;
-	} while (cin.fail() || !above_0(New_station.id));
-	do
-	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the station name" << endl;
-		getline (cin, New_station.name);
-	} while (cin.fail());
-	do
-	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the number of workshop (Number above 0)" << endl;
-		cin >>New_station.number_of_workshops;
-	} while (cin.fail() || !above_0(New_station.number_of_workshops));
-	do
-	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
-		cin >> New_station.workshops_in_operation;
-	} while (cin.fail() || !above_0(New_station.workshops_in_operation) || New_station.workshops_in_operation > New_station.number_of_workshops);
-	do
-	{
-		cin.clear();
-		cin.ignore(10000,'\n');
-		cout << "Please, enter the efficiency of station (0-100)" << endl;
-		cin >> New_station.efficiency;
-	} while (cin.fail() || !above_0(New_station.efficiency) || New_station.efficiency > 100);
-	return New_station;
-}
-
-
-
-void Edit_Station(Station& New_station)
+int Edit_Station(SStation& work_station)
 {	
-	do
+	while (1)
 	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the number of workshop (Number above 0)" << endl;
-		cin >> New_station.number_of_workshops;
-	} while (cin.fail() || !above_0(New_station.number_of_workshops));
+		Edit_Station_Menu();
+		switch (GetcorrectNumber(0, 4))
+		{
+		case 1:
+		{
+			do
+			{
+				cin.clear();
+				cin.ignore(1164, '\n');
+				cout << "Please, enter the station name" << endl;
+				getline(cin, work_station.name);
+			} while (cin.fail());
+			break;
+		}
+		case 2:
+		{
+			cout << "Please, enter the number of workshop (Number [1-100])" << endl;
+			work_station.number_of_workshops = GetcorrectNumber(1, 100);
+			break;
+		}
+		case 3:
+		{
+			do
+			{
+				cin.clear();
+				cin.ignore(1164, '\n');
+				cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
+				cin >> work_station.workshops_in_operation;
+			} while (cin.fail() || (work_station.workshops_in_operation) <= 0 || work_station.workshops_in_operation > work_station.number_of_workshops);
+			break;
+		}
+		case 4:
+		{
+			cout << "Please, enter the efficiency of station (0-100)" << endl;
+			work_station.efficiency = GetcorrectNumber(0, 100);
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		default:
+		{
+			cout << "Wrong action" << endl;
+		}
+		}
+	}
+	return 0;
 }
 
 
 
-void Save_Station(Station& New_Station)
+void Save_Station(ofstream& fout, SStation& New_Station)
 {
-	ofstream fout;
-	fout.open("Save_Station.txt", ios::out);
-	if (fout.is_open())
-	{
-		fout << New_Station.id << endl << New_Station.name << endl << New_Station.number_of_workshops << endl
+		fout << New_Station.name << endl << New_Station.number_of_workshops << endl
 			<< New_Station.workshops_in_operation << endl << New_Station.efficiency << endl;
-		fout.close();
-	}
-	else {
-		cout << "Error opening file" << endl;
-	}
 }
 
 
 
-Station Load_Station()
+SStation Load_Station(ifstream& fin)
 {
-	ifstream fin;
-	Station New_Station;
-	fin.open("Save_Station.txt", ios::in);
-	if (fin.is_open())
-	{
-		fin >> New_Station.id;
+		SStation New_Station;
 		fin >> New_Station.name;
 		fin >> New_Station.number_of_workshops;
 		fin >> New_Station.workshops_in_operation;
 		fin >> New_Station.efficiency;
-		fin.close();
-	}
-	else {
-		cout << "Error the opening file" << endl;
-	}
 	return New_Station;
 
 }
 
 
-
-
- Pipe Create_New_Pipe()
+void Edit_Pipe_Menu()
 {
-	Pipe New_Pipe;
-	do 
-	{
-		cin.clear();
-		cin.ignore(10000, '\n');
-		cout << "Please, enter the pipe id (id above 0)" << endl;
-		cin >> New_Pipe.id;
-	} while (cin.fail() || !above_0(New_Pipe.id));
-	do
-	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the pipe length (mm, length above 0)" << endl;
-cin >> New_Pipe.length;
-	} while (cin.fail() || !above_0(New_Pipe.length));
-	do
-	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the pipe diametr (mm, diametr above 0)" << endl;
-		cin >> New_Pipe.diametr;
-	} while (cin.fail() || !above_0(New_Pipe.diametr));
-	do
-	{
-		cout << "Please, enter the pipe status (work/repair)" << endl;
-		cin >> New_Pipe.status;
-	} while (!correct(New_Pipe.status));
-	return New_Pipe;
-
+	cout << "1. Edit length" << endl
+		<< "2. Edit diametr" << endl
+		<< "3. Edit status" << endl
+		<< "0. Exit" << endl
+		<< "Choose action:" << endl;
 }
 
-
-
-void Print_Pipe(Pipe New_Pipe)//разобраться 
+int Edit_Pipe(CPipe& work_pipe)
 {
-	cout << "Pipe ID:\t" << New_Pipe.id
-		<< "\tPipe length:\t" << New_Pipe.length
-		<< "\tPipe diametr:\t" << New_Pipe.diametr
-		<< "\tPipe status:\t" << New_Pipe.status << endl;
-}
-
-
-
-void Print_Station(Station New_Station)
-{
-	cout << "Station ID:\t" << New_Station.id
-		<< "\tStation name:\t" << New_Station.name
-		<< "\tNumber of workshop:\t" << New_Station.number_of_workshops
-		<< "\tWorkshops in operation:\t" << New_Station.workshops_in_operation
-		<< "\tStation efficiency:\t" << New_Station.efficiency << endl;
-}
-
-
-
-void Edit_Pipe(Pipe& New_Pipe)
-{
-	do
+	while (1)
 	{
-		cin.clear();
-		cin.ignore(1164, '\n');
-		cout << "Please, enter the pipe length (mm, length above 0)" << endl;
-		cin >> New_Pipe.length;
-	} while (cin.fail() || !above_0(New_Pipe.length));
-}
-
-
-
-void Save_Pipe(Pipe& New_Pipe)
-{
-	ofstream fout;
-	fout.open("Save.txt", ios::out);
-	if (fout.is_open())
-	{
-		fout << New_Pipe.id << endl << New_Pipe.length << endl << New_Pipe.diametr << endl << New_Pipe.status << endl;
-		fout.close();
+		Edit_Pipe_Menu();
+		switch (GetcorrectNumber(0, 3))
+		{
+			case 1:
+				{
+					cout << "Please, enter the pipe length (m, length = [1-2000000])" << endl;
+					work_pipe.length = GetcorrectNumber(1, 2000000);
+					break;
+				}
+			case 2:
+				{
+					cout << "Please, enter the pipe diametr (mm, diametr above 0)" << endl;
+					work_pipe.diametr = GetcorrectNumber(1, 10000);
+					break;
+				}
+			case 3:
+				{
+					do
+					{
+						cout << "Please, enter the pipe status (work/repair)" << endl;
+						cin >> work_pipe.status;
+					} while ((work_pipe.status) == "work" || (work_pipe.status) == "repair");
+					break;
+				}
+			case 0:
+				{
+					return 0;
+				}
+			default:
+				{
+					cout << "Wrong action" << endl;
+				}
+		}
 	}
-	else {
-		cout << "Error opening file" << endl;
-	}
+	return 0;
 }
 
 
 
-Pipe Load_Pipe()
+void Save_Pipe(ofstream& fout, CPipe& New_Pipe)
 {
-	ifstream fin;
-	Pipe New_Pipe;
-	fin.open("Save.txt", ios::in);
-	if (fin.is_open())
-	{
-		fin >> New_Pipe.id;
+	
+		fout  << New_Pipe.length << endl << New_Pipe.diametr << endl << New_Pipe.status << endl;
+		
+}
+
+
+
+CPipe Load_Pipe(ifstream& fin)
+{
+	CPipe New_Pipe;
+
 		fin >> New_Pipe.length;
 		fin >> New_Pipe.diametr;
 		fin >> New_Pipe.status;
-		fin.close();
-	}
-	else {
-		cout << "Error the opening file" << endl;
-	}
 	return New_Pipe;
 
 }
@@ -256,75 +183,279 @@ void PrintMenu()
 		<< "6. Edit the station" << endl
 		<< "7. Save to file" << endl
 		<< "8. Load from file" << endl
+		<< "9. Find Pipe" << endl
 		<< "0. Exit" << endl
 		<< "Choose action:" << endl;
 }
 
 
 
-int GetcorrectNumber(int min, int max)
+
+
+CPipe& Select_Pipe(vector <CPipe>& pipe_group)
 {
-	int x;
-	while (((cin >> x)).fail() || x<min || x>max)
+	cout << "Enter the index: " << endl;
+	unsigned int index = GetcorrectNumber(1u, pipe_group.size());
+	return pipe_group[index - 1];
+}
+
+
+SStation& Select_Station(vector <SStation>& station_group)
+{
+	cout << "Enter the index: " << endl;
+	unsigned int index = GetcorrectNumber(1u, station_group.size() );
+	return station_group[index-1];
+}
+
+
+vector <int> Find_Pipe_Diametr(const vector<CPipe>& pipe_group, int diametr)
+{
+	vector <int> result;
+	int index = 0;
+	for (auto& CPipe : pipe_group)
 	{
-	cin.clear();
-	cin.ignore(10000, '\n');
-	cout << "Input error!" << endl;
+		if (CPipe.diametr == diametr)
+		{
+			result.push_back(index);
+			index++;
+		}
 	}
-	return x;
+	return result;
+
+}
+
+
+vector <int> Find_Pipe_Status(const vector<CPipe>& pipe_group, string status)
+{
+	vector <int> result;
+	int index = 0;
+	for (auto& CPipe : pipe_group)
+	{
+		if (CPipe.status == status)
+		{
+			result.push_back(index);
+			index++;
+		}
+	}
+	return result;
+
+}
+
+
+vector <int> Find_Station_Name(const vector<SStation>& station_group, string name)
+{
+	vector <int> result;
+	int index = 0;
+	for (auto& SStation : station_group)
+	{
+		if (SStation.name == name)
+		{
+			result.push_back(index);
+			index++;
+		}
+	}
+	return result;
+
+}
+
+
+
+vector <int> Find_Station_Name(const vector<SStation>& station_group, double percent)
+{
+	vector <int> result;
+	int index = 0;
+	for (auto& SStation : station_group)
+	{
+		double not_working_workshop = (SStation.number_of_workshops - SStation.workshops_in_operation) / SStation.number_of_workshops;
+		if (not_working_workshop * 100 == percent)
+		{
+			result.push_back(index);
+			index++;
+		}
+	}
+	return result;
+}
+
+int Edit_pipe_filtr(const vector<CPipe>& pipe_group, int diametr)
+{
+	while (1)
+	{
+		cout << "1.Edit this pipe" << endl
+			<< "2.Exit" << endl;
+		switch (GetcorrectNumber(0, 1))
+		{
+		case 1:
+		{
+			for (int i : Find_Pipe_Diametr(pipe_group, diametr))
+				Edit_Pipe(pipe_group[i]);
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		}
+	}
 }
 
 
 int main()
 {
-	Station Preset_Station;
-	Pipe Preset_Pipe;
+	vector <SStation> station_group;
+	vector <CPipe> pipe_group;
 	while (1)
 	{
 		PrintMenu();
-		switch (GetcorrectNumber(0,8))
+		switch (GetcorrectNumber(0,9))
 		{
 		case 1:
 			{
-				Preset_Pipe= Create_New_Pipe();
+				CPipe Preset_Pipe;
+				cin >> Preset_Pipe;
+				pipe_group.push_back(Preset_Pipe);
 				break;
 			}
 		case 2:
-			{
-				Preset_Station = Create_New_Station();
+			{	
+				SStation Preset_Station;
+				cin >> Preset_Station;
+				station_group.push_back(Preset_Station);
 				break;
 			}
 		case 3:
 			{
-				Print_Pipe(Preset_Pipe);
+				for (auto& Select_Pipe: pipe_group)
+					cout << Select_Pipe << endl;
 				break;
 			}
 		case 4:
 			{
-				Print_Station(Preset_Station);
+				for (auto& Select_Station: station_group)
+					cout << Select_Station << endl;
 				break;
 			}
 		case 5:
 		{
-			Edit_Pipe(Preset_Pipe);
+			Edit_Pipe(Select_Pipe(pipe_group));
 			break;
 		}
 		case 6:
 		{
-			Edit_Station(Preset_Station);
+			Edit_Station(Select_Station(station_group));
 			break;
 		}
 		case 7:
-		{
-			Save_Pipe(Preset_Pipe);
-			Save_Station(Preset_Station);
+		{	
+			ofstream fout; 
+			fout.open("Save.txt", ios::out);
+			if (fout.is_open())
+			{	
+				fout << pipe_group.size() << endl;
+				for (CPipe Preset_Pipe:pipe_group)
+					Save_Pipe(fout, Preset_Pipe);
+				fout.close();
+			}
+			else {
+				cout << "Error opening file" << endl;
+			}
+			fout.open("Save_Station.txt", ios::out);
+			if (fout.is_open())
+			{
+				fout << station_group.size() << endl;
+				for (SStation Preset_Station : station_group)
+					Save_Station(fout, Preset_Station);
+				fout.close();
+			}
+			else {
+				cout << "Error opening file" << endl;
+			}
 			break;
 		}
 		case 8:
-		{
-			Preset_Pipe=Load_Pipe();
-			Preset_Station = Load_Station();
+		{	
+			ifstream fin;
+			int count;
+				fin.open("Save.txt", ios::in);
+				if (fin.is_open())
+				{
+					fin >> count;
+					while (count--)
+						pipe_group.push_back(Load_Pipe(fin));
+					fin.close();
+				}
+				else {
+					cout << "Error the opening file" << endl;
+				}
+
+				fin.open("Save_Station.txt", ios::in);
+				if (fin.is_open())
+				{
+					fin >> count;
+					while (count--)
+						station_group.push_back(Load_Station(fin));
+					fin.close();
+				}
+				else {
+					cout << "Error the opening file" << endl;
+				}
 			break;
+		}
+		case 9:
+		{ 
+			while (1)
+			{
+				cout << "1. Find a pipe by diametr" << endl
+					<< "2. Find a pipe by status" << endl
+					<< "0. Exit" << endl;
+				vector <int> filtr;
+				switch (GetcorrectNumber(0, 2))
+				{
+					case 1:
+						{
+							int diametr;
+							cout << "Please, enter the pipe diametr (mm, diametr above 0)" << endl;
+							diametr = GetcorrectNumber(1, 10000);
+							for (int i : Find_Pipe_Diametr(pipe_group, diametr))
+									cout << pipe_group[i];
+							break;
+						}
+					case 2:
+					{
+						string status;
+						do
+						{
+							cout << "Please, enter the pipe status (work/repair)" << endl;
+							cin >> status;
+						} while (status == "work" || status == "repair");
+						for (int i : Find_Pipe_Status(pipe_group, status))
+								cout << pipe_group[i];
+						while (1)
+						{
+							cout << "Edit this pipe" << endl
+								<< "0.Exit" << endl;
+							switch (GetcorrectNumber(0, 1)) {
+								case 1:
+								{
+									for (int i : Find_Pipe_Status(pipe_group, status))
+										Edit_Pipe(pipe_group[i]);
+									break;
+								}
+								case 0:
+								{
+									return 0;
+								}
+							}
+						}
+						break;
+					}
+					case 0:
+					{
+						return 0;
+					}
+				}
+
+			}
+			
 		}
 		case 0:
 		{
