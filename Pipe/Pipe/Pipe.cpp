@@ -90,6 +90,7 @@ void Save_Station(ofstream& fout, SStation& New_Station)
 SStation Load_Station(ifstream& fin)
 {
 		SStation New_Station;
+		fin.get();
 		getline(fin, New_Station.name);
 		fin >> New_Station.number_of_workshops;
 		fin >> New_Station.workshops_in_operation;
@@ -671,7 +672,11 @@ int main()
 		case 7:
 		{	
 			ofstream fout; 
-			fout.open("Save.txt", ios::out);
+			string file_name;
+			cout << "Please, enterthe name of saving pipe file" << endl;
+			cin >> file_name;
+			file_name += ".txt";
+			fout.open(file_name, ios::out);
 			if (fout.is_open())
 			{	
 				fout << pipe_group.size() << endl;
@@ -682,7 +687,11 @@ int main()
 			else {
 				cout << "Error opening file" << endl;
 			}
-			fout.open("Save_Station.txt", ios::out);
+
+			cout << "Please, enter the name of saving station file" << endl;
+			cin >> file_name;
+			file_name += ".txt";
+			fout.open(file_name, ios::out);
 			if (fout.is_open())
 			{
 				fout << station_group.size() << endl;
@@ -699,7 +708,11 @@ int main()
 		{	
 			ifstream fin;
 			int count;
-				fin.open("Save.txt", ios::in);
+			string file_name;
+			cout << "Please, enter the name of loading pipe file" << endl;
+			cin >> file_name;
+			file_name += ".txt";
+				fin.open(file_name, ios::in);
 				if (fin.is_open())
 				{
 					fin >> count;
@@ -708,10 +721,13 @@ int main()
 					fin.close();
 				}
 				else {
-					cout << "Error the opening file" << endl;
+					cout << "Error the opening file:" << file_name << endl;
 				}
 
-				fin.open("Save_Station.txt", ios::in);
+				cout << "Please, enter the name of loading station file" << endl;
+				cin >> file_name;
+				file_name += ".txt";
+				fin.open(file_name, ios::in);
 				if (fin.is_open())
 				{
 					fin >> count;
@@ -720,7 +736,7 @@ int main()
 					fin.close();
 				}
 				else {
-					cout << "Error the opening file" << endl;
+					cout << "Error the opening file:" << file_name << endl;
 				}
 			break;
 		}
