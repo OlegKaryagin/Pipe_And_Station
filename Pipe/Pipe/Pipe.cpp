@@ -90,7 +90,7 @@ void Save_Station(ofstream& fout, SStation& New_Station)
 SStation Load_Station(ifstream& fin)
 {
 		SStation New_Station;
-		fin >> New_Station.name;
+		getline(fin, New_Station.name);
 		fin >> New_Station.number_of_workshops;
 		fin >> New_Station.workshops_in_operation;
 		fin >> New_Station.efficiency;
@@ -272,7 +272,181 @@ vector <int> Find_Station_Not_Working_Workshop(const vector<SStation>& station_g
 }
 
 
-int Find_Pipe(const vector<CPipe>& pipe_group)
+int Edit_Interval_Pipe(vector <CPipe>& pipe_group, int id_first_pipe, int id_last_pipe)
+{
+	while (1)
+	{
+		int i;
+		Edit_Pipe_Menu();
+		switch (GetcorrectNumber(0, 3))
+		{
+		case 1:
+		{
+			int  edit_length;
+			cout << "Please, enter the pipe length (m, length = [1-2000000])" << endl;
+			edit_length = GetcorrectNumber(1, 2000000);
+			for (i = id_first_pipe; i <= id_last_pipe; i++)
+				pipe_group[i].length = edit_length;
+			cout << "Changes completed!" << endl;
+			break;
+		}
+		case 2:
+		{
+			int  edit_diametr;
+			cout << "Please, enter the pipe diametr (mm, diametr above 0)" << endl;
+			edit_diametr = GetcorrectNumber(1, 10000);
+			for (i = id_first_pipe; i <= id_last_pipe; i++)
+				pipe_group[i].diametr = edit_diametr;
+			cout << "Changes completed!" << endl;
+			break;
+		}
+		case 3:
+		{
+			string edit_status;
+			do
+			{
+				cout << "Please, enter the pipe status (work/repair)" << endl;
+				cin >> edit_status;
+			} while (edit_status != "work" & edit_status != "repair");
+			for (i = id_first_pipe; i <= id_last_pipe; i++)
+				pipe_group[i].status = edit_status;
+			cout << "Changes completed!" << endl;
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		default:
+		{
+			cout << "Wrong action" << endl;
+		}
+		}
+	}
+	return 0;
+}
+
+
+int Edit_Filtred_Pipe(vector <int> Find_Pipe, vector <CPipe>& pipe_group)
+{
+	while (1)
+	{
+		cout << "Do you want to change these pipes?" << endl
+			<< "1. Yes." << endl
+			<< "0. I'm just watching" << endl;
+		switch (GetcorrectNumber(0, 1))
+		{
+		case 1:
+		{
+			Edit_Interval_Pipe(pipe_group, Find_Pipe[0], Find_Pipe[Find_Pipe.size() - 1]);
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		}
+	}
+}
+
+
+int Edit_Interval_Station(vector <SStation>& station_group, int id_first_station, int id_last_station)
+{
+	while (1)
+	{
+		int i;
+		Edit_Station_Menu();
+		switch (GetcorrectNumber(0, 4))
+		{
+		case 1:
+		{
+			for (i = id_first_station; i <= id_last_station; i++)
+			{
+				do
+				{
+					cin.clear();
+					cin.ignore(1164, '\n');
+					cout << "Please, enter the station name" << endl;
+					getline(cin, station_group[i].name);
+				} while (cin.fail());
+			}
+			break;
+		}
+		case 2:
+		{
+			int edit_number_of_workshops;
+			cout << "Please, enter the number of workshop (Number [1-100])" << endl;
+			edit_number_of_workshops = GetcorrectNumber(1, 100);
+			for (i = id_first_station; i <= id_last_station; i++)
+				station_group[i].number_of_workshops = edit_number_of_workshops;
+			break;
+		}
+		case 3:
+		{
+			int edit_workshops_in_operation;
+			do
+			{
+				cin.clear();
+				cin.ignore(1164, '\n');
+				cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
+				cin >> edit_workshops_in_operation;
+			} while (cin.fail() || (edit_workshops_in_operation) <= 0);
+			for (i = id_first_station; i <= id_last_station; i++)
+			{
+				if (edit_workshops_in_operation <= station_group[i].number_of_workshops)
+				{
+					station_group[i].workshops_in_operation = edit_workshops_in_operation;
+				}
+			}
+			break;
+		}
+		case 4:
+		{
+			int edit_efficiency;
+			cout << "Please, enter the efficiency of station (0-100)" << endl;
+			edit_efficiency = GetcorrectNumber(0, 100);
+			for (i = id_first_station; i <= id_last_station; i++)
+				station_group[i].efficiency = edit_efficiency;
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		default:
+		{
+			cout << "Wrong action" << endl;
+		}
+		}
+	}
+	return 0;
+}
+
+
+int Edit_Filtred_Station(vector <int> Find_Station, vector <SStation>& station_group)
+{
+	while (1)
+	{
+		cout << "Do you want to change these stations?" << endl
+			<< "1. Yes." << endl
+			<< "0. I'm just watching" << endl;
+		switch (GetcorrectNumber(0, 1))
+		{
+		case 1:
+		{
+			Edit_Interval_Station(station_group, Find_Station[0], Find_Station[Find_Station.size()-1]);
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		}
+	}
+}
+
+
+int Find_Pipe( vector<CPipe>& pipe_group)
 {
 	while (1)
 	{
@@ -288,6 +462,7 @@ int Find_Pipe(const vector<CPipe>& pipe_group)
 				diametr = GetcorrectNumber(1, 10000);
 				for (int i : Find_Pipe_Diametr(pipe_group, diametr))
 					cout << pipe_group[i];
+				Edit_Filtred_Pipe(Find_Pipe_Diametr(pipe_group,diametr),pipe_group);
 				break;
 			}
 		case 2:
@@ -300,6 +475,7 @@ int Find_Pipe(const vector<CPipe>& pipe_group)
 				} while ((status != "work") & (status != "repair"));
 				for (int i : Find_Pipe_Status(pipe_group, status))
 					cout << pipe_group[i];
+				Edit_Filtred_Pipe(Find_Pipe_Status(pipe_group, status), pipe_group);
 				break;
 			}
 		case 0:
@@ -315,7 +491,7 @@ int Find_Pipe(const vector<CPipe>& pipe_group)
 }
 
 
-int Find_Station(const vector<SStation>& station_group)
+int Find_Station(vector<SStation>& station_group)
 {
 	while (1)
 	{
@@ -336,6 +512,7 @@ int Find_Station(const vector<SStation>& station_group)
 			} while (cin.fail());;
 			for (int i : Find_Station_Name(station_group, name))
 				cout << station_group[i];
+			Edit_Filtred_Station(Find_Station_Name(station_group, name), station_group);
 			break;
 		}
 		case 2:
@@ -345,6 +522,7 @@ int Find_Station(const vector<SStation>& station_group)
 			percent = GetcorrectNumber(0, 100);
 			for (int i : Find_Station_Not_Working_Workshop(station_group, percent))
 				cout << station_group[i];
+			Edit_Filtred_Station(Find_Station_Not_Working_Workshop(station_group, percent), station_group);
 			break;
 		}
 		case 0:
@@ -360,56 +538,7 @@ int Find_Station(const vector<SStation>& station_group)
 }
 
 
-int Edit_Interval_Pipe(vector <CPipe>& pipe_group, int id_first_pipe, int id_last_pipe)
-{
-	while (1)
-	{
-		int i;
-		Edit_Pipe_Menu();
-		switch (GetcorrectNumber(0, 3))
-		{
-		case 1:
-		{	
-			int  edit_length;
-			cout << "Please, enter the pipe length (m, length = [1-2000000])" << endl;
-			edit_length = GetcorrectNumber(1,2000000);
-			for (i = id_first_pipe; i <= id_last_pipe; i++)
-					pipe_group[i].length = edit_length;
-			break;
-		}
-		case 2:
-		{
-			int  edit_diametr;
-			cout << "Please, enter the pipe diametr (mm, diametr above 0)" << endl;
-			edit_diametr = GetcorrectNumber(1, 10000);
-			for (i = id_first_pipe; i <= id_last_pipe; i++)
-				pipe_group[i].diametr = edit_diametr;
-			break;
-		}
-		case 3:
-		{
-			string edit_status;
-			do
-			{
-				cout << "Please, enter the pipe status (work/repair)" << endl;
-				cin >> edit_status;
-			} while (edit_status == "work" || edit_status == "repair");
-			for (i = id_first_pipe; i <= id_last_pipe; i++)
-				pipe_group[i].status;
-			break;
-		}
-		case 0:
-		{
-			return 0;
-		}
-		default:
-		{
-			cout << "Wrong action" << endl;
-		}
-		}
-	}
-	return 0;
-}
+
 
 
 int Edit_Pipe(vector <CPipe>& pipe_group)
@@ -450,77 +579,7 @@ int Edit_Pipe(vector <CPipe>& pipe_group)
 }
 
 
-int Edit_Interval_Station(vector <SStation>& station_group,int id_first_station, int id_last_station)
-{
-	while (1)
-	{
-		int i;
-		Edit_Station_Menu();
-		switch (GetcorrectNumber(0, 4))
-		{
-		case 1:
-		{
-			for (i = id_first_station; i <= id_last_station; i++)
-			{
-				do
-				{
-					cin.clear();
-					cin.ignore(1164, '\n');
-					cout << "Please, enter the station name" << endl;
-					getline(cin, station_group[i].name);
-				} while (cin.fail());
-			}
-			break;
-		}
-		case 2:
-		{
-			int edit_number_of_workshops;
-			cout << "Please, enter the number of workshop (Number [1-100])" << endl;
-			edit_number_of_workshops = GetcorrectNumber(1, 100);
-				for (i = id_first_station; i <= id_last_station; i++)
-						station_group[i].number_of_workshops = edit_number_of_workshops;
-			break;
-		}
-		case 3:
-		{
-			int edit_workshops_in_operation;
-			do
-			{
-				cin.clear();
-				cin.ignore(1164, '\n');
-				cout << "Please, enter the number workshop in operation (Number above 0)" << endl;
-				cin >> edit_workshops_in_operation;
-			} while (cin.fail() || (edit_workshops_in_operation) <= 0 );
-			for (i = id_first_station; i <= id_last_station; i++)
-			{
-				if (edit_workshops_in_operation <= station_group[i].number_of_workshops)
-				{
-					station_group[i].workshops_in_operation = edit_workshops_in_operation;
-				}
-			}
-			break;
-		}
-		case 4:
-		{
-			int edit_efficiency;
-			cout << "Please, enter the efficiency of station (0-100)" << endl;
-			edit_efficiency = GetcorrectNumber(0, 100);
-			for (i = id_first_station; i <= id_last_station; i++)
-				station_group[i].efficiency = edit_efficiency;
-			break;
-		}
-		case 0:
-		{
-			return 0;
-		}
-		default:
-		{
-			cout << "Wrong action" << endl;
-		}
-		}
-	}
-	return 0;
-}
+
 
 
 int Edit_Station(vector <SStation>& station_group)
@@ -559,6 +618,8 @@ int Edit_Station(vector <SStation>& station_group)
 		}
 	}
 }
+
+
 
 
 
