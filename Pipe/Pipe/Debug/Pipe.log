@@ -1,2 +1,4 @@
 ﻿  Pipe.cpp
+C:\Users\олег игоревич\Documents\GitHub\Pipe_And_Station\Pipe\Pipe\Pipe.cpp(229,23): warning C4018: <=: несоответствие типов со знаком и без знака
+C:\Users\олег игоревич\Documents\GitHub\Pipe_And_Station\Pipe\Pipe\Pipe.cpp(257,22): warning C4018: <=: несоответствие типов со знаком и без знака
   Pipe.vcxproj -> C:\Users\олег игоревич\Documents\GitHub\Pipe_And_Station\Pipe\Debug\Pipe.exe

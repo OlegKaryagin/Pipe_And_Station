@@ -186,6 +186,8 @@ void PrintMenu()
 		<< "8. Load from file" << endl
 		<< "9. Find Pipe" << endl
 		<< "10. Find Station" << endl
+		<< "11. Delete pipe" << endl
+		<< "12. Delete station" << endl
 		<< "0. Exit" << endl
 		<< "Choose action:" << endl;
 }
@@ -209,6 +211,61 @@ SStation& Select_Station(vector <SStation>& station_group)
 	return station_group[index-1];
 }
 
+
+int Delete_Pipe(vector <CPipe>& pipe_group)
+{
+	while (1)
+	{
+		cout << "1. Delete pipe" << endl
+			<< "0. Back to menu" << endl;
+		switch (GetcorrectNumber(0, 1))
+		{
+		case 1:
+			{
+				int index;
+				cout << "Please, enter the pipe ID" << endl;
+				index = GetcorrectNumber(1, 100000);
+				pipe_group.erase(pipe_group.begin() + index - 1);
+				for (index; index <= pipe_group.size() - 1; index++)
+					pipe_group[index - 1] = pipe_group[index];
+				break;
+			}
+		case 0:
+			{
+				return 0;
+			}
+		}
+
+	}
+}
+
+
+int Delete_Station(vector <SStation>& station_group)
+{
+	while (1)
+	{
+		cout << "1. Delete station" << endl
+			<< "0. Back to menu" << endl;
+		switch (GetcorrectNumber(0, 1))
+		{
+		case 1:
+		{
+			int index;
+			cout << "Please, enter the station ID" << endl;
+			index = GetcorrectNumber(1, 100000);
+			station_group.erase(station_group.begin() + index - 1);
+			for (index; index <= station_group.size() - 1; index++)
+				station_group[index - 1] = station_group[index];
+			break;
+		}
+		case 0:
+		{
+			return 0;
+		}
+		}
+
+	}
+}
 
 
 vector <int> Find_Pipe_Diametr(const vector<CPipe>& pipe_group, int diametr)
@@ -631,7 +688,7 @@ int main()
 	while (1)
 	{
 		PrintMenu();
-		switch (GetcorrectNumber(0,10))
+		switch (GetcorrectNumber(0,12))
 		{
 		case 1:
 			{
@@ -748,6 +805,16 @@ int main()
 		case 10:
 		{
 			Find_Station(station_group);
+			break;
+		}
+		case 11:
+		{
+			Delete_Pipe(pipe_group);
+			break;
+		}
+		case 12:
+		{
+			Delete_Station(station_group);
 			break;
 		}
 		case 0:
