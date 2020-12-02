@@ -21,6 +21,28 @@ SStation::SStation()
 }
 
 
+fstream& operator << (fstream& fout, const SStation& work_station)
+{
+	fout << work_station.InD << endl
+		<< work_station.name << endl
+		<< work_station.workshops_in_operation << endl
+		<< work_station.efficiency << endl;
+	return fout;
+}
+
+
+
+fstream& operator >> (fstream& fin, const SStation& work_station)
+{
+	fin >> work_station.InD;
+	fin >> work_station.name;
+	fin >> work_station.number_of_workshops;
+	fin >> work_station.workshops_in_operation;
+	fin	>> work_station.efficiency;
+	return fin;
+}
+
+
 ostream& operator << (ostream& out, const SStation& work_station)
 {
 	out << "Station ID:\t" << work_station.InD
@@ -53,4 +75,22 @@ istream& operator >> (istream& in, SStation& work_station)
 	cout << "Please, enter the efficiency of station (0-100)" << endl;
 	work_station.efficiency = GetcorrectNumber(0, 100);
 	return in;
+}
+
+
+void CPipe::Edit_Pipe()
+{
+	this-> = work_station.number_of_workshops ;
+	this->work_station.workshops_in_operation;
+	this->work_station.efficiency;
+}
+
+
+SStation::SStation(std::fstream& fin)
+{
+	fin >> this-> work_station.InD;
+	fin >> this-> work_station.name;
+	fin >> this-> work_station.number_of_workshops;
+	fin >> this-> work_station.workshops_in_operation;
+	fin >> this-> work_station.efficiency;
 }

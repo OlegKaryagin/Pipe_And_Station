@@ -1,5 +1,6 @@
 #include "CPipe.h"
 #include <iostream>
+#include <fstream>
 #include "correctnumber.h"
 
 
@@ -10,18 +11,33 @@ int CPipe::MaxID = 1;
 
 CPipe::CPipe()
 {
-	id = MaxID++;
-	length = 0;
-	diametr = 0;
-	status = "Unknown";
+	this->id = MaxID++;
+	this->length =GetcorrectNumber(1,1200);
+	this->diametr = GetcorrectNumber(1,2520);
+	this->status = false;
 }
 
 
-bool correct(string test)
+
+fstream& operator << (fstream& fout, const CPipe& work_pipe)
 {
-	return test == "work" || test == "repair";
+	fout << work_pipe.id << endl
+		<< work_pipe.length << endl
+		<< work_pipe.diametr << endl
+		<< work_pipe.status << endl;
+	return fout;
 }
 
+
+
+fstream& operator >> (fstream& fin, const CPipe& work_pipe)
+{
+	fin >> work_pipe.id;
+	fin >> work_pipe.length;
+	fin >> work_pipe.diametr;
+	fin >> work-pipe.status;
+	return fin;
+}
 
 
 ostream& operator << (ostream& out, const CPipe& work_pipe)
@@ -47,4 +63,20 @@ istream& operator >> (istream& in, CPipe& work_pipe)
 		in >> work_pipe.status;
 	} while (!correct(work_pipe.status));
 	return in;
+}
+
+
+void CPipe::Edit_Pipe()
+{
+	this->status = !status;
+}
+
+
+
+CPipe::CPipe(std::fstream& fin)
+{
+	fin >> this-> work_pipe.id;
+	fin >> this-> work_pipe.length;
+	fin >> this-> work_pipe.diametr;
+	fin >> this-> work - pipe.status;
 }
