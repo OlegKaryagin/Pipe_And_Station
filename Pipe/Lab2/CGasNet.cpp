@@ -400,14 +400,17 @@ void CGasNet::ConnectStatiopn()
 	pipes[pipe_id].inStation = second;
 }
 
-bool CGasNet::Proverka(int a)
+bool CGasNet::Proverka(int a, int b)
 {
-	for (auto i : pipes)
+	for (auto t : pipes)
 	{
-		if (pipes[i.first].inStation == a)
-			return true;
+		if (pipes[t.first].outStation == a)
+			if (pipes[t.first].inStation == b)
+				return true;
+			else
+				return false;
 		else
-			return false;
+			false;
 	}
 
 }
@@ -418,21 +421,14 @@ void CGasNet::FillMatrSmezh()
 	{
 		for (auto j : stations)
 		{
-			if (Proverka(i.first) && Proverka(j.first))
+			if (Proverka(i.first, j.first))
 				strok.push_back(1);
 			else
 				strok.push_back(0);
 		}
 		matrSmezh.push_back(strok);
 	}
-	for (int i = 0; i < matrSmezh.size(); i++)
-	{
-		for (int j = 0; j < matrSmezh[i].size(); j++)
-		{
-			cout << matrSmezh[i][j];
-		}
-		
-	}
 }
+
 
 

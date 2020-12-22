@@ -33,5 +33,5 @@ public:
 	void LoadPipe();
 	void ConnectStatiopn();
 	void FillMatrSmezh();
-	bool Proverka(int a);
+	bool Proverka(int a, int b);
 };
