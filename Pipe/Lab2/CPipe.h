@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 class CPipe
 {
@@ -11,6 +12,8 @@ class CPipe
 	int diametr;
 
 public:
+	int inStation;
+	int outStation;
 	int GetID() const;
 	int GetLength() const;
 	int GetDiametr() const;

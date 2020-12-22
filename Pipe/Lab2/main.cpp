@@ -44,7 +44,7 @@ int main()
 	while (1)
 	{
 		MainMenu();
-		switch (GetCorrectNumber(0, 19))
+		switch (GetCorrectNumber(0, 20))
 		{
 			case 1:
 			{
@@ -138,7 +138,13 @@ int main()
 			}
 			case 19:
 			{
-				
+				gasnet.ConnectStatiopn();
+				break;
+			}
+			case 20:
+			{
+				gasnet.FillMatrSmezh();
+				break;
 			}
 			case 0:
 			{

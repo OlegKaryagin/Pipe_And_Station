@@ -385,5 +385,54 @@ void CGasNet::LoadPipe()
 	else { cout << "error"; }
 }
 
+void CGasNet::ConnectStatiopn()
+{
+	int first;
+	int second;
+	int pipe_id;
+	cout << "Enter the out station Id:" << endl;
+	cin >> first;
+	cout << "Enter the in station Id:" << endl;
+	cin >> second;
+	cout << "Enter the pipe id:" << endl;
+	cin >> pipe_id;
+	pipes[pipe_id].outStation = first;
+	pipes[pipe_id].inStation = second;
+}
+
+bool CGasNet::Proverka(int a)
+{
+	for (auto i : pipes)
+	{
+		if (pipes[i.first].inStation == a)
+			return true;
+		else
+			return false;
+	}
+
+}
+
+void CGasNet::FillMatrSmezh()
+{
+	for (auto i : stations)
+	{
+		for (auto j : stations)
+		{
+			if (Proverka(i.first) && Proverka(j.first))
+				strok.push_back(1);
+			else
+				strok.push_back(0);
+		}
+		matrSmezh.push_back(strok);
+	}
+	for (int i = 0; i < matrSmezh.size(); i++)
+	{
+		for (int j = 0; j < matrSmezh[i].size(); j++)
+		{
+			cout << matrSmezh[i][j];
+		}
+		
+	}
+}
 
 

@@ -7,9 +7,10 @@ using namespace std;
 
 class CGasNet
 {
+	vector<int> strok;
 	unordered_map<int, CPipe> pipes;
 	unordered_map <int, CStation> stations;
-	vector <int> nodes;
+	vector<vector<int>> matrSmezh;
 public:
 	CGasNet();
 	void AddPipe();
@@ -30,4 +31,7 @@ public:
 	void DeleteStation();
 	void LoadStation();
 	void LoadPipe();
+	void ConnectStatiopn();
+	void FillMatrSmezh();
+	bool Proverka(int a);
 };
