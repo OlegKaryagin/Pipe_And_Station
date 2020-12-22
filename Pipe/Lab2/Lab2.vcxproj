@@ -139,11 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CGasNet.cpp" />
     <ClCompile Include="CPipe.cpp" />
     <ClCompile Include="CStation.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CGasNet.h" />
     <ClInclude Include="CPipe.h" />
     <ClInclude Include="CStation.h" />
     <ClInclude Include="Utils.h" />

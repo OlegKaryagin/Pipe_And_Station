@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <map>
 
 class CStation
 {
@@ -15,7 +16,7 @@ public:
 	double efficiency;
 	void EditStation();
 	CStation();
-	CStation(std::fstream& fin);;
+	CStation(std::fstream& fin);
 
 
 	friend std::istream& operator >> (std::istream& in, CStation& station);
