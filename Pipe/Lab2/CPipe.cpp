@@ -12,7 +12,7 @@ using namespace std;
 
 CPipe::CPipe(std::fstream& fin)
 {
-	fin >> this->id >> this->length >> this->diametr >> this->status;
+	fin >> this->id >> this->length >> this->diametr >> this->status >> this->inStation >> this->outStation;
 }
 
 void CPipe::EditPipe()
@@ -28,13 +28,15 @@ fstream& operator << (fstream& fout, const CPipe& work_pipe)
 	fout << work_pipe.id << endl
 		<< work_pipe.length << endl
 		<< work_pipe.diametr << endl
-		<< work_pipe.status << endl;
+		<< work_pipe.status << endl
+		<< work_pipe.inStation << endl
+		<< work_pipe.outStation << endl;
 	return fout;
 }
 
 fstream& operator >> (fstream& fin, CPipe& work_pipe)
 {
-	fin >> work_pipe.id >> work_pipe.length >> work_pipe.diametr >> work_pipe.status;
+	fin >> work_pipe.id >> work_pipe.length >> work_pipe.diametr >> work_pipe.status >> work_pipe.inStation >> work_pipe.outStation;
 	return fin;
 }
 

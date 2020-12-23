@@ -333,6 +333,12 @@ void CGasNet::DeleteStation()
 	{
 		remove(stations, id);
 	}
+	for (int i=1; i < pipes.size(); i++)
+		if ((pipes[i].inStation == id) || (pipes[i].outStation == id))
+		{
+			pipes[i].inStation = 0;
+			pipes[i].outStation = 0;
+		}
 }
 
 void CGasNet::Load()
