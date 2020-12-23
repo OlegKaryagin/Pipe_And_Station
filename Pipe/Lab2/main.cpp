@@ -48,7 +48,7 @@ int main()
 	while (1)
 	{
 		MainMenu();
-		switch (GetCorrectNumber(0, 21))
+		switch (GetCorrectNumber(0, 22))
 		{
 			case 1:
 			{
@@ -153,6 +153,12 @@ int main()
 			case 21:
 			{
 				gasnet.TopologSort();
+				break;
+			}
+			case 22:
+			{
+				gasnet.DeleteConnect();
+				break;
 			}
 			case 0:
 			{
