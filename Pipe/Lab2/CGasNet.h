@@ -18,8 +18,7 @@ public:
 	void AddStation();
 	void PrintPipes();
 	void PrintStations();
-	void SavePipes();
-	void SaveStations();
+	void Save();
 	void FindPipeByDiametr();
 	void FindPipeByStatus();
 	void EditPipes();
@@ -30,8 +29,7 @@ public:
 	void EditStationsGroup();
 	void DeletePipe();
 	void DeleteStation();
-	void LoadStation();
-	void LoadPipe();
+	void Load();
 	void ConnectStatiopn();
 	bool CanBeUsed(const CPipe& pipe) const;
 	void TopologSort();

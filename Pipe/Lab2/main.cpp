@@ -19,8 +19,8 @@ void MainMenu()
 {
 	cout << "1.New pipe." << endl
 		<< "2. Print pipe." << endl
-		<< "3. Save pipe." << endl
-		<< "4. Load pipe." << endl
+		<< "3. Save file." << endl
+		<< "4. Load file." << endl
 		<< "5.Find pipe by diametr." << endl
 		<< "6. Find pipe by status." << endl
 		<< "7. Edit pipe." << endl
@@ -28,17 +28,15 @@ void MainMenu()
 		<< "9. Delete pipe." << endl
 		<< "10.New station." << endl
 		<< "11. Print station." << endl
-		<< "12. Save station." << endl
-		<< "13. Load station." << endl
-		<< "14.Find station by name." << endl
-		<< "15. Find station by percent." << endl
-		<< "16. Edit station." << endl
-		<< "17. Edit station group." << endl
-		<< "18. Delete station." << endl
-		<< "19. Create connect" << endl
-		<< "20. Show conect" << endl
-		<< "21. Topological sort" << endl
-		<< "22. Delete connect" << endl
+		<< "12.Find station by name." << endl
+		<< "13. Find station by percent." << endl
+		<< "14. Edit station." << endl
+		<< "15. Edit station group." << endl
+		<< "16. Delete station." << endl
+		<< "17. Create connect" << endl
+		<< "18. Show conect" << endl
+		<< "19. Topological sort" << endl
+		<< "20. Delete connect" << endl
 		<< "0. Exit." << endl;
 }
 
@@ -48,7 +46,7 @@ int main()
 	while (1)
 	{
 		MainMenu();
-		switch (GetCorrectNumber(0, 22))
+		switch (GetCorrectNumber(0, 20))
 		{
 			case 1:
 			{
@@ -62,12 +60,12 @@ int main()
 			}
 			case 3:
 			{
-				gasnet.SavePipes();
+				gasnet.Save();
 				break;
 			}
 			case 4:
 			{
-				gasnet.LoadPipe();
+				gasnet.Load();
 				break;
 			}
 			case 5:
@@ -107,55 +105,45 @@ int main()
 			}
 			case 12:
 			{
-				gasnet.SaveStations();
+				gasnet.FindStationsByName();
 				break;
 			}
 			case 13:
 			{
-				gasnet.LoadStation();
+				gasnet.FindStationsByPercent();
 				break;
 			}
 			case 14:
 			{
-				gasnet.FindStationsByName();
-				break;
-			}
-			case 15:
-			{
-				gasnet.FindStationsByPercent();
-				break;
-			}
-			case 16:
-			{
 				gasnet.EditStations();
 				break;
 			}
-			case 17:
+			case 15:
 			{			
 				gasnet.EditStationsGroup();
 				break;
 			}
-			case 18:
+			case 16:
 			{
 				gasnet.DeleteStation();
 				break;
 			}
-			case 19:
+			case 17:
 			{
 				gasnet.ConnectStatiopn();
 				break;
 			}
-			case 20:
+			case 18:
 			{
 				gasnet.ShowNetwork();
 				break;
 			}
-			case 21:
+			case 19:
 			{
 				gasnet.TopologSort();
 				break;
 			}
-			case 22:
+			case 20:
 			{
 				gasnet.DeleteConnect();
 				break;

@@ -193,7 +193,7 @@ void CGasNet::PrintStations()
 		cout << it->second << endl;
 }
 
-void CGasNet::SavePipes()
+void CGasNet::Save()
 {
 	fstream fout;
 	string filename;
@@ -202,23 +202,12 @@ void CGasNet::SavePipes()
 	fout.open(filename + ".txt", fstream::out);
 	if (fout.is_open())
 	{
+		fout << pipes.size() << endl;
+		fout << stations.size() << endl;
 		for (auto it = pipes.begin(); it != pipes.end(); ++it)
 		{
 			fout << it->second << endl;
 		}
-	}
-	fout.close();
-}
-
-void CGasNet::SaveStations()
-{
-	fstream fout;
-	string filename;
-	cout << "Save file name: ";
-	cin >> filename;
-	fout.open(filename + ".txt", fstream::out);
-	if (fout.is_open())
-	{
 		for (auto it = stations.begin(); it != stations.end(); ++it)
 		{
 			fout << it->second << endl;
@@ -226,6 +215,8 @@ void CGasNet::SaveStations()
 	}
 	fout.close();
 }
+
+
 
 void CGasNet::FindPipeByDiametr()
 {
@@ -344,9 +335,10 @@ void CGasNet::DeleteStation()
 	}
 }
 
-void CGasNet::LoadStation()
+void CGasNet::Load()
 {
 	fstream fin;
+	unordered_map<int, CPipe> pipe2;
 	unordered_map<int, CStation> station2;
 	string filename;
 	cout << "Load file name: ";
@@ -354,39 +346,29 @@ void CGasNet::LoadStation()
 	fin.open(filename + ".txt", fstream::in);
 	if (fin.is_open())
 	{
-		while (!fin.eof())
+		int pipeCount;
+		int stationCount;
+		fin >> pipeCount;
+		fin >> stationCount;
+		for (int i = 0; i < pipeCount; i++)
+		{
+			CPipe preset_pipe(fin);
+			pipe2.insert(make_pair(preset_pipe.GetID(), preset_pipe));
+		}
+		for (int i = 0; i < stationCount; i++)
 		{
 			CStation preset_station(fin);
 			station2.insert(make_pair(preset_station.GetID(), preset_station));
 		}
 		fin.close();
+		pipes = pipe2;
 		stations = station2;
 		CStation::MaxID = FindMaxID(stations);
-	}
-	else { cout << "error"; }
-}
-
-void CGasNet::LoadPipe()
-{
-	fstream fin;
-	unordered_map<int, CPipe> pipe2;
-	string filename;
-	cout << "Load file name: ";
-	cin >> filename;
-	fin.open(filename + ".txt", fstream::in);
-	if (fin.is_open())
-	{
-		while (!fin.eof())
-		{
-			CPipe preset_pipe(fin);
-			pipe2.insert(make_pair(preset_pipe.GetID(), preset_pipe));
-		}
-		fin.close();
-		pipes = pipe2;
 		CPipe::MID = FindMaxID(pipes);
 	}
 	else { cout << "error"; }
 }
+
 
 void CGasNet::ConnectStatiopn()
 {
