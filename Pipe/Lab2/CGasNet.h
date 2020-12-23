@@ -3,14 +3,15 @@
 #include <vector>
 #include "CPipe.h"
 #include "CStation.h"
+#include <stack>
 using namespace std;
 
 class CGasNet
 {
-	vector<int> strok;
 	unordered_map<int, CPipe> pipes;
 	unordered_map <int, CStation> stations;
-	vector<vector<int>> matrSmezh;
+	vector<vector<int>> GetEdgesAndVertexes(unordered_map<int, int>& indexVertexes, int& n);
+
 public:
 	CGasNet();
 	void AddPipe();
@@ -32,6 +33,10 @@ public:
 	void LoadStation();
 	void LoadPipe();
 	void ConnectStatiopn();
-	void FillMatrSmezh();
-	bool Proverka(int a, int b);
+	bool CanBeUsed(const CPipe& pipe) const;
+	void TopologSort();
+	void DeleteConnect();
+	void ShowNetwork();
+	
+	
 };

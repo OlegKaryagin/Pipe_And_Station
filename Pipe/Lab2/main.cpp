@@ -35,6 +35,10 @@ void MainMenu()
 		<< "16. Edit station." << endl
 		<< "17. Edit station group." << endl
 		<< "18. Delete station." << endl
+		<< "19. Create connect" << endl
+		<< "20. Show conect" << endl
+		<< "21. Topological sort" << endl
+		<< "22. Delete connect" << endl
 		<< "0. Exit." << endl;
 }
 
@@ -44,7 +48,7 @@ int main()
 	while (1)
 	{
 		MainMenu();
-		switch (GetCorrectNumber(0, 20))
+		switch (GetCorrectNumber(0, 21))
 		{
 			case 1:
 			{
@@ -143,8 +147,12 @@ int main()
 			}
 			case 20:
 			{
-				gasnet.FillMatrSmezh();
+				gasnet.ShowNetwork();
 				break;
+			}
+			case 21:
+			{
+				gasnet.TopologSort();
 			}
 			case 0:
 			{

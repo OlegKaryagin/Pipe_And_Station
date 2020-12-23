@@ -2,6 +2,9 @@
 #include <stack>
 #include "CStation.h"
 #include "Utils.h"
+#include <numeric>
+#include <set>
+#include "CPipe.h"
 
 CGasNet::CGasNet()
 {
@@ -358,7 +361,7 @@ void CGasNet::LoadStation()
 		}
 		fin.close();
 		stations = station2;
-		CPipe::MID = FindMaxID(stations);
+		CStation::MaxID = FindMaxID(stations);
 	}
 	else { cout << "error"; }
 }
@@ -400,35 +403,134 @@ void CGasNet::ConnectStatiopn()
 	pipes[pipe_id].inStation = second;
 }
 
-bool CGasNet::Proverka(int a, int b)
+bool CGasNet::CanBeUsed(const CPipe& pipe) const
 {
-	for (auto t : pipes)
-	{
-		if (pipes[t.first].outStation == a)
-			if (pipes[t.first].inStation == b)
-				return true;
-			else
-				return false;
-		else
-			false;
-	}
-
+	if (pipe.inStation != 0 && pipe.outStation != 0 && pipe.status)
+		return true;
+	else
+		return false;
 }
 
-void CGasNet::FillMatrSmezh()
+vector<vector<int>> CGasNet::GetEdgesAndVertexes(unordered_map<int, int>& indexVertexes, int& n)
 {
-	for (auto i : stations)
-	{
-		for (auto j : stations)
+	set<int> vertexes;
+	for (const pair<int, CPipe>& p : pipes)
+		if (p.second.inStation != 0)
 		{
-			if (Proverka(i.first, j.first))
-				strok.push_back(1);
-			else
-				strok.push_back(0);
+			vertexes.insert(p.second.outStation);
+			vertexes.insert(p.second.inStation);
 		}
-		matrSmezh.push_back(strok);
+	n = vertexes.size();
+	unordered_map<int, int> invertIndexVertexes;
+	int i = 0;
+	for (const int& vertex : vertexes)
+	{
+		indexVertexes.insert(make_pair(i, vertex));
+		invertIndexVertexes.insert(make_pair(vertex, i++));
+	}
+	vector<vector<int>> edges;
+	edges.resize(n);
+	for (const pair<int, CPipe>& p : pipes)
+		if (p.second.inStation!=0)
+			edges[invertIndexVertexes[p.second.outStation]].push_back(invertIndexVertexes[p.second.inStation]);
+	return edges;
+}
+
+void topologicalSortUtil(int v, bool visited[], stack<int>& Stack, vector<vector<int>>& edges)
+{
+	visited[v] = true;
+
+	vector<int>::iterator i;
+	for (i = edges[v].begin(); i != edges[v].end(); ++i)
+		if (!visited[*i])
+			topologicalSortUtil(*i, visited, Stack, edges);
+
+	Stack.push(v);
+}
+
+bool dfs(int v, vector<char>& cl, vector<int>& p, int& cycle_st, const vector<vector<int>>& edges) {
+	cl[v] = 1;
+	for (size_t i = 0; i < edges[v].size(); ++i) {
+		int to = edges[v][i];
+		if (cl[to] == 0) {
+			p[to] = v;
+			if (dfs(to, cl, p, cycle_st, edges))
+				return true;
+		}
+		else if (cl[to] == 1) {
+			cycle_st = to;
+			return true;
+		}
+	}
+	cl[v] = 2;
+	return false;
+}
+
+bool HasCycle(vector<vector<int>>& edges, int n)
+{
+	vector<char> cl;
+	vector<int> p;
+	int cycle_st;
+	p.assign(n, -1);
+	cl.assign(n, 0);
+	cycle_st = -1;
+	for (int i = 0; i < n; ++i)
+		if (dfs(i, cl, p, cycle_st, edges))
+			break;
+	if (cycle_st == -1)
+	{
+		return false;
+	}
+	else
+	{
+		cout << "Attantion! Circle!\n";
+		return true;
 	}
 }
+
+void CGasNet::DeleteConnect()
+{
+	int pipe_id;
+	cout << "Enter the in station Id:" << endl;
+	cin >> pipe_id;
+	pipes[pipe_id].outStation = 0;
+	pipes[pipe_id].inStation = 0;
+}
+
+void CGasNet::TopologSort()
+{
+	unordered_map<int, int> indexVertexes;
+	int n;
+	vector<vector<int>> edges = GetEdgesAndVertexes(indexVertexes, n);
+	if (HasCycle(edges, n) == false)
+	{
+		stack<int> Stack;
+
+		bool* visited = new bool[n];
+		for (int i = 0; i < n; i++)
+			visited[i] = false;
+
+		for (int i = 0; i < n; i++)
+			if (visited[i] == false)
+				topologicalSortUtil(i, visited, Stack, edges);
+
+		while (Stack.empty() == false)
+		{
+			cout << "Station " << indexVertexes[Stack.top()] << " -> ";
+			Stack.pop();
+		}
+	}
+}
+
+void CGasNet::ShowNetwork()
+{
+	for (const pair<int, CPipe>& p : pipes)
+		if (p.second.inStation != 0)
+			cout << "Station " << p.second.outStation << " -- Pipe " << p.first << " -> Station " << p.second.inStation << '\n';
+}
+
+
+
 
 
 

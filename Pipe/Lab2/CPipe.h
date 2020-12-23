@@ -12,8 +12,8 @@ class CPipe
 	int diametr;
 
 public:
-	int inStation;
-	int outStation;
+	int inStation = 0;
+	int outStation = 0;
 	int GetID() const;
 	int GetLength() const;
 	int GetDiametr() const;
